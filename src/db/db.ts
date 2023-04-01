@@ -1,5 +1,6 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
-import { Pool } from 'pg'
+import pg from 'pg'
+const { Pool } = pg
 import { RETOOL_DB_CONNECTION_STRING } from '$env/static/private'
 
 const pool = new Pool({
