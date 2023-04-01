@@ -10,10 +10,15 @@ export const cities = pgTable('cities', {
 
 export const connections = pgTable('connections', {
   id: serial('id'),
-  origin: integer('origin').references(() => cities.id),
-  destination: integer('destination').references(() => cities.id),
+  origin: integer('origin')
+    .references(() => cities.id)
+    .notNull(),
+  destination: integer('destination')
+    .references(() => cities.id)
+    .notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
 export type City = InferModel<typeof cities>
 export type Connection = InferModel<typeof connections>
+export type RichConnection = Connection & { destinationName: string }

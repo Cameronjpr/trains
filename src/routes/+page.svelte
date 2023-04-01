@@ -1,16 +1,14 @@
 <script lang="ts">
   import type { PageData } from './$types'
-  import type { City, Connection } from '@db/schema'
+  import type { City, RichConnection } from '@db/schema'
+  import ConnectionPreview from '../components/ConnectionPreview.svelte'
+
   export let data: PageData
   const { cities } = data
 
-  let origin = 'London'
-  let availableConnections = [] as Array<{
-    id: number
-    origin: number
-    destination: number
-    destinationName: string
-  }>
+  let originName = 'London'
+  let availableConnections = getConnections('London')
+  let originSearch = ''
 
   async function getConnections(originName: string) {
     const originId = cities.find((city: City) => city.name === originName).id
@@ -18,42 +16,48 @@
     const response = await fetch(`/api/connections/${originId}`)
     const data = await response.json()
 
-    availableConnections = data
+    return data as Array<RichConnection>
   }
 
   console.log('availableConnections', availableConnections)
 </script>
 
-<h1>Trains 🚂</h1>
-<h2>Choose your starting location</h2>
+<h1>EuroTrains</h1>
 
-{#each cities as city}
-  <button
-    on:click={() => {
-      origin = city.name
-      getConnections(city.name)
-    }}>{city.name}</button
-  >
-{/each}
+<label>
+  Search for your starting city...
+  <input type="text" bind:value={originSearch} />
+</label>
 
-{#if origin}
+<section id="origin-selection-row">
+  {#each cities as city}
+    {#if city.name.toLowerCase().includes(originSearch.toLowerCase())}
+      <button
+        on:click={() => {
+          originName = city.name
+          availableConnections = getConnections(city.name)
+        }}>{city.name}</button
+      >
+    {/if}
+  {/each}
+</section>
+
+{#key originName}
   <section>
-    <p>From {origin}, you can travel to:</p>
-    <ul>
-      {#each availableConnections as connection}
-        <li>
-          <h3>{connection.destinationName}</h3>
-          <a
-            href="https://www.google.com/search?q=night+trains+{origin}+to+{connection}"
-            target="_blank"
-          >
-            Search {origin} to {connection.destinationName}
-          </a>
-        </li>
-      {/each}
-    </ul>
+    {#await availableConnections}
+      <p>Fetching connections from {originName}...</p>
+    {:then connections}
+      <p>From {originName}, you can travel to:</p>
+      <ul>
+        {#each connections as connection}
+          <ConnectionPreview {connection} />
+        {/each}
+      </ul>
+    {:catch error}
+      <p>Something went wrong: {error.message}</p>
+    {/await}
   </section>
-{/if}
+{/key}
 
 <style>
   ul {
@@ -62,15 +66,14 @@
     padding-block: 1em;
   }
 
-  li {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5em;
-    padding-block: 0.5em;
-    border-bottom: 1px solid #ccc;
+  section {
+    margin-bottom: 2em;
   }
 
-  section {
-    margin-top: 2em;
+  #origin-selection-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    padding-top: 1em;
   }
 </style>
