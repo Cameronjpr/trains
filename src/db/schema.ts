@@ -23,4 +23,4 @@ export const connections = pgTable('connections', {
 
 export type City = InferModel<typeof cities>;
 export type Connection = InferModel<typeof connections>;
-export type RichConnection = Connection & { destinationName: string };
+export type RichConnection = Connection & { destinationName: string; lat: number; lon: number };

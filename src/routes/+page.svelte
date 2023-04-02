@@ -48,6 +48,5 @@
 		display: flex;
 		flex-direction: column;
 		border-radius: 0.75em;
-		/* box-shadow: 0 5px 5px 1px rgba(0, 0, 0, 0.1); */
 	}
 </style>

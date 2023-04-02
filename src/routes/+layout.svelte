@@ -10,7 +10,7 @@
 
 <nav>
 	<a href="/">Home</a>
-	<span>Journey has {journeyStops} stops</span>
+	<a href="/journey">My journey</a>
 </nav>
 
 <main>
@@ -35,5 +35,10 @@
 	a {
 		color: white;
 		text-decoration: none;
+	}
+
+	.journey-stops {
+		display: flex;
+		gap: 0.5em;
 	}
 </style>
