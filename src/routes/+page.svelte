@@ -44,7 +44,6 @@
 	}
 
 	article {
-		padding: 1em;
 		display: flex;
 		flex-direction: column;
 		border-radius: 0.75em;

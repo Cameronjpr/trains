@@ -104,13 +104,6 @@
 <h1 class="hero">{city.name}</h1>
 <div id="map" />
 
-<BottomDrawer isOpen={drawerOpen} {toggleDrawer}>
-	<strong>Selected connection: {selectedConnection?.destinationName}</strong>
-	<button on:click={() => addStop(selectedConnection?.destination)}>Add stop</button>
-</BottomDrawer>
-
-<h2>Travel from {city.name} to:</h2>
-
 <div id="origin-pin" class="pin">
 	<Pin />
 	<span class="pin-label">{city.name}</span>
@@ -129,9 +122,16 @@
 		on:click={() => handlePinSelect(connection.id)}
 		><Pin /><span class="pin-label">{connection.destinationName}</span></button
 	>
-
-	<ConnectionPreview {connection} />
 {/each}
+
+<h2>Practical information</h2>
+
+{#if !!selectedConnection}
+	<BottomDrawer isOpen={drawerOpen} {toggleDrawer}>
+		<strong>Selected connection: {selectedConnection?.destinationName}</strong>
+		<button on:click={() => addStop(selectedConnection.destination)}>Add stop</button>
+	</BottomDrawer>
+{/if}
 
 <style>
 	#map {
@@ -174,11 +174,6 @@
 	:global(#origin-pin) {
 		stroke: rgba(237, 138, 33, 0.92);
 	}
-
-	/* :global(.pin:hover) {
-		transform: scale(105%) translate(-0%, -95%);
-		margin: 0.25em;
-	} */
 
 	:global(.pin-label) {
 		position: absolute;

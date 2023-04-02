@@ -25,7 +25,7 @@
 	}
 
 	nav {
-		background-color: dodgerblue;
+		background-color: var(--color-primary);
 		padding: 1em;
 		display: flex;
 		justify-content: space-between;
@@ -35,10 +35,5 @@
 	a {
 		color: white;
 		text-decoration: none;
-	}
-
-	.journey-stops {
-		display: flex;
-		gap: 0.5em;
 	}
 </style>
